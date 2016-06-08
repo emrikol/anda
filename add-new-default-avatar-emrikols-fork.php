@@ -3,7 +3,7 @@
  * Plugin Name: Add New Default Avatar [Emrikol's Fork]
  * Plugin URI:
  * Description: Add new option to the Default Avatar list.
- * Version: 2.0
+ * Version: 2.0.0
  * Author: Decarbonated Web Services
  * Author URI: http://www.decarbonated.com/
  * License: GPL2
@@ -13,13 +13,64 @@
  */
 
 if ( ! class_exists( 'DWS_ANDA' ) ) {
+
+	/**
+	 * Primary plugin class
+	 *
+	 * @since 2.0.0
+	 */
 	class DWS_ANDA {
+
+		/**
+		 * Plugin Slug.
+		 *
+		 * @since 2.0.0
+		 * @access public
+		 * @var string $slug
+		 */
 		var $slug = 'anda';
+
+		/**
+		 * Plugin Name.
+		 *
+		 * @since 2.0.0
+		 * @access public
+		 * @var string $name
+		 */
 		var $name = 'Add New Default Avatar';
+
+		/**
+		 * Plugin access level.
+		 *
+		 * @since 2.0.0
+		 * @access public
+		 * @var string $access
+		 */
 		var $access = 'manage_options';
+
+		/**
+		 * Plugin installation directory.
+		 *
+		 * @since 2.0.0
+		 * @access public
+		 * @var string $installdir
+		 */
 		var $installdir;
+
+		/**
+		 * Plugin version.
+		 *
+		 * @since 2.0.0
+		 * @access public
+		 * @var string $ver
+		 */
 		var $ver = '2.0';
 
+		/**
+		 * Class constructor.
+		 *
+		 * @since 2.0.0
+		 */
 		function __construct() {
 			$this->installdir = WP_PLUGIN_URL . '/' . str_replace( basename( __FILE__ ), '', plugin_basename( __FILE__ ) );
 
@@ -35,26 +86,51 @@ if ( ! class_exists( 'DWS_ANDA' ) ) {
 			register_deactivation_hook( __FILE__, array( $this, 'plugin_destruct' ) );	// Register plugin destruct.
 		}
 
+		/**
+		 * Adding admin menu.
+		 *
+		 * @since 2.0.0
+		 */
 		function action_admin_menu() {
 			// Add "Add New Avatar" link under the "Appearance" menu.
 			$page = add_submenu_page( 'themes.php', esc_html__( 'Add New Default Avatar', 'dws' ), esc_html__( 'Add New Avatar', 'dws' ), $this->access, 'add-new-default-avatar', array( $this, 'plugin_page' ) );
 		}
 
+		/**
+		 * Enqueueing admin scripts.
+		 *
+		 * @since 2.0.0
+		 */
 		function action_admin_enqueue_scripts() {
 			wp_enqueue_script( 'jquery-ui-core' ); // Make sure jQuery UI is loaded.
 			wp_enqueue_script( 'dws_ajaxupload', $this->installdir . 'js/ajaxupload.js', array( 'jquery' ), $this->ver );  // Add AjaxUpload.
 			wp_enqueue_script( 'dws_anda_js', $this->installdir . 'js/dws_anda.js', array( 'jquery', 'dws_ajaxupload' ), $this->ver );  // Add JS.
 		}
 
+		/**
+		 * Enqueueing admin styles.
+		 *
+		 * @since 2.0.0
+		 */
 		function action_wp_enqueue_scripts() {
 			wp_enqueue_style( 'dws_anda_style', $this->installdir . 'css/style.css', array(), $this->ver, 'all' );  // Add CSS.
 		}
 
+		/**
+		 * Printing inline admin scripts.
+		 *
+		 * @since 2.0.0
+		 */
 		function action_admin_print_scripts() {
 			// Set necessary 'variable' JavaScript options.
 			echo '<script type="text/javascript">var dws_anda_admin_url = "' . esc_url( admin_url( 'admin-ajax.php' ) ) . '";</script>';
 		}
 
+		/**
+		 * Admin AJAX callback
+		 *
+		 * @since 2.0.0
+		 */
 		function action_wp_ajax_dws_anda_ajax_callback() {
 			// FIX: Need to add nonce check during security review.
 			// Add Ajax callback.
@@ -101,6 +177,12 @@ if ( ! class_exists( 'DWS_ANDA' ) ) {
 			}
 		}
 
+		/**
+		 * Default Avatar filter.
+		 *
+		 * @param array $avatar_defaults Default Core Avatars.
+		 * @since 2.0.0
+		 */
 		function filter_avatar_defaults( $avatar_defaults ) {
 			// Add plugin to avatar settings.
 			$options = get_option( 'dws_anda' );
@@ -120,6 +202,11 @@ if ( ! class_exists( 'DWS_ANDA' ) ) {
 			}
 		}
 
+		/**
+		 * Plugin Activiation.
+		 *
+		 * @since 2.0.0
+		 */
 		function plugin_construct() {
 			$options = array();											// Set up options array.
 			$options['avatars'] = array();								// Set up avatars array.
@@ -127,6 +214,11 @@ if ( ! class_exists( 'DWS_ANDA' ) ) {
 			update_option( 'dws_anda', $options );							// Save plugin options.
 		}
 
+		/**
+		 * Plugin Dectiviation.
+		 *
+		 * @since 2.0.0
+		 */
 		function plugin_destruct() {
 			$options = get_option( 'dws_anda' );	// Get Plugin Prefrences.
 
@@ -135,6 +227,11 @@ if ( ! class_exists( 'DWS_ANDA' ) ) {
 			delete_option( 'dws_anda' );			// Delete the plugin prefrences.
 		}
 
+		/**
+		 * Generate Admin page.
+		 *
+		 * @since 2.0.0
+		 */
 		function plugin_page() {
 			$options = get_option( 'dws_anda' );
 
@@ -214,6 +311,12 @@ if ( ! class_exists( 'DWS_ANDA' ) ) {
 			</div>
 			<?php
 		}
+
+		/**
+		 * Show Avatars.
+		 *
+		 * @since 2.0.0
+		 */
 		function show_avatars() {
 			$options = get_option( 'dws_anda' );
 
