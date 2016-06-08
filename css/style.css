@@ -1,0 +1,24 @@
+.new-default-avatar {
+	max-width: 128px;
+	max-height: 128px;
+}
+.upload_button_div {
+	margin: 10px 0px;
+}
+#dws_anda_add .hidden {
+	display: none;
+}
+#dws_anda_add label {
+	display: block;
+	float: left;
+	width: 100px;
+}
+#dws_anda_add .text {
+	width: 200px;
+}
+#dws_anda_add li {
+	margin: 10px 0px;
+}
+#dws_anda_add ol, #dws_anda_add li {
+	list-style-type: none;
+}
