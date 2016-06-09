@@ -64,8 +64,7 @@ if ( ! class_exists( 'DWS_ANDA' ) ) {
 		 */
 		function __construct() {
 			add_action( 'admin_menu', array( $this, 'action_admin_menu' ) );
-			add_action( 'admin_print_scripts', array( $this, 'action_admin_print_scripts' ) );
-			add_action( 'wp_ajax_dws_anda_ajax_callback', array( $this, 'action_wp_ajax_dws_anda_ajax_callback' ) );
+			add_action( 'admin_print_footer_scripts', array( $this, 'action_admin_print_footer_scripts' ) );
 			add_action( 'wp_enqueue_scripts', array( $this, 'action_wp_enqueue_scripts' ) );
 			add_action( 'admin_enqueue_scripts', array( $this, 'action_admin_enqueue_scripts' ) );
 
@@ -91,9 +90,8 @@ if ( ! class_exists( 'DWS_ANDA' ) ) {
 		 * @since 2.0.0
 		 */
 		function action_admin_enqueue_scripts() {
-			wp_enqueue_script( 'jquery-ui-core' ); // Make sure jQuery UI is loaded.
-			wp_enqueue_script( 'dws_ajaxupload', plugins_url( 'js/ajaxupload.js', __FILE__ ), array( 'jquery' ), $this->ver );  // Add AjaxUpload.
-			wp_enqueue_script( 'dws_anda_js', plugins_url( 'js/dws_anda.js', __FILE__ ), array( 'jquery', 'dws_ajaxupload' ), $this->ver );  // Add JS.
+			// Enqueue core media uploader.
+			wp_enqueue_media();
 		}
 
 		/**
@@ -110,60 +108,40 @@ if ( ! class_exists( 'DWS_ANDA' ) ) {
 		 *
 		 * @since 2.0.0
 		 */
-		function action_admin_print_scripts() {
-			// Set necessary 'variable' JavaScript options.
-			echo '<script type="text/javascript">var dws_anda_admin_url = "' . esc_url( admin_url( 'admin-ajax.php' ) ) . '";</script>';
-		}
+		function action_admin_print_footer_scripts() {
+			?>
+			<script type='text/javascript'>
+				jQuery( function( $ ) {
+					var media_uploader = null;
 
-		/**
-		 * Admin AJAX callback
-		 *
-		 * @since 2.0.0
-		 */
-		function action_wp_ajax_dws_anda_ajax_callback() {
-			// FIX: Need to add nonce check during security review.
-			// Add Ajax callback.
-			if ( isset( $_POST['type'] ) && isset( $_POST['data'] ) ) { // WPCS: input var okay.
-				$ajax_action = sanitize_text_field( wp_unslash( $_POST['type'] ) ); // WPCS: input var okay.
-			} else {
-				die();
-			}
+					function open_media_uploader_image() {
+						media_uploader = wp.media({
+						frame:    "post",
+						state:    "insert",
+						multiple: false
+						} );
 
-			switch ( $ajax_action ) {
-				case 'upload':
-					// Acts as the name
-					$clicked_id = sanitize_text_field( wp_unslash( $_POST['data'] ) ); // WPCS: input var okay.
+						media_uploader.on( "insert", function() {
+							var json = media_uploader.state().get("selection").first().toJSON();
 
-					if ( ! isset( $_FILES[ $clicked_id ] ) ) { // WPCS: input var okay.
-						// Bad file upload.
-						die();
+							console.log( json );
+							var image_url = json.url;
+							var image_caption = json.caption;
+							var image_title = json.title;
+
+							$( '#dws_anda_image_url_upload' ).val( image_url );
+							$( '#dws_anda_avatar_name' ).val( image_title );
+						} );
+
+						media_uploader.open();
 					}
 
-					$filename = sanitize_text_field( wp_unslash( $_FILES[ $clicked_id ] ) ); // WPCS: input var okay.
-					$filename['name'] = preg_replace( '/[^a-zA-Z0-9._\-]/', '', $filename['name'] );
-
-					$override['test_form'] = false;
-					$override['action'] = 'wp_handle_upload';
-					$uploaded_file = wp_handle_upload( $filename, $override );
-					$upload_tracking[] = $clicked_id;
-					update_option( $clicked_id , $uploaded_file['url'] );
-
-					if ( ! empty( $uploaded_file['error'] ) ) {
-						echo esc_html__( 'Upload Error: ', 'dws' ) . esc_html( $uploaded_file['error'] );
-					} else {
-						// Is the Response.
-						echo wp_json_encode( $uploaded_file );
-					}
-					die(); // Always have to end with a die, thanks to the "die('0');" in admin-ajax.php.
-				case 'image_reset':
-					// Acts as the name
-					$id = sanitize_text_field( wp_unslash( $_POST['data'] ) ); // WPCS: input var okay.
-
-					delete_option( $id );
-					die(); // Always have to end with a die, thanks to the "die('0');" in admin-ajax.php.
-				default:
-					die();
-			}
+					$( '#dws_anda_image_url_upload, #dws_anda_image_url' ).click( function( e ) {
+						open_media_uploader_image();
+					} );
+				} );
+			</script>
+			<?php
 		}
 
 		/**
@@ -281,10 +259,7 @@ if ( ! class_exists( 'DWS_ANDA' ) ) {
 							<li>
 								<label for="dws_anda_image_url"><?php esc_html_e( 'Image URL', 'dws' ); ?>: </label>
 								<input class='text' name='dws_anda_image_url' id='dws_anda_image_url_upload' type='text' value='' />
-								<div class='upload_button_div'>
-									<span class='button image_upload_button' id='dws_anda_image_url'><?php esc_html_e( 'Upload Image', 'dws' ); ?></span>
-									<span class='button image_reset_button hidden' id='reset_dws_anda_image_url"' title='dws_anda_image_url'><?php esc_html_e( 'Remove', 'dws' ); ?></span>
-								</div>
+								<input type="button" class="button button-primary button-large" id='dws_anda_image_url' value="Select Image" />
 							</li>
 							<li class='nothidden'>
 								<label for="dws_anda_avatar_name"><?php esc_html_e( 'Avatar Name', 'dws' ); ?>: </label>
