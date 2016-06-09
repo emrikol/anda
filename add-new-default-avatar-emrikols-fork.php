@@ -134,7 +134,7 @@ if ( ! class_exists( 'DWS_ANDA' ) ) {
 		function action_wp_ajax_dws_anda_ajax_callback() {
 			// FIX: Need to add nonce check during security review.
 			// Add Ajax callback.
-			if ( isset( $_POST['type'] && isset( $_POST['data'] ) ) ) { // WPCS: input var okay.
+			if ( isset( $_POST['type'] ) && isset( $_POST['data'] ) ) { // WPCS: input var okay.
 				$ajax_action = sanitize_text_field( wp_unslash( $_POST['type'] ) ); // WPCS: input var okay.
 			} else {
 				die();
