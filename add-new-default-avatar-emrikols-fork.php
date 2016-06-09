@@ -65,7 +65,6 @@ if ( ! class_exists( 'DWS_ANDA' ) ) {
 		function __construct() {
 			add_action( 'admin_menu', array( $this, 'action_admin_menu' ) );
 			add_action( 'admin_print_footer_scripts', array( $this, 'action_admin_print_footer_scripts' ) );
-			add_action( 'wp_enqueue_scripts', array( $this, 'action_wp_enqueue_scripts' ) );
 			add_action( 'admin_enqueue_scripts', array( $this, 'action_admin_enqueue_scripts' ) );
 
 			add_filter( 'avatar_defaults', array( $this, 'filter_avatar_defaults' ) );
@@ -92,14 +91,8 @@ if ( ! class_exists( 'DWS_ANDA' ) ) {
 		function action_admin_enqueue_scripts() {
 			// Enqueue core media uploader.
 			wp_enqueue_media();
-		}
-
-		/**
-		 * Enqueueing admin styles.
-		 *
-		 * @since 2.0.0
-		 */
-		function action_wp_enqueue_scripts() {
+			
+			// Plugin CSS.
 			wp_enqueue_style( 'dws_anda_style', plugins_url( 'css/style.css', __FILE__ ), array(), $this->ver, 'all' );  // Add CSS.
 		}
 
