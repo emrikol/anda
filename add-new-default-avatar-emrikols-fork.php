@@ -49,15 +49,6 @@ if ( ! class_exists( 'DWS_ANDA' ) ) {
 		var $access = 'manage_options';
 
 		/**
-		 * Plugin installation directory.
-		 *
-		 * @since 2.0.0
-		 * @access public
-		 * @var string $installdir
-		 */
-		var $installdir;
-
-		/**
 		 * Plugin version.
 		 *
 		 * @since 2.0.0
@@ -72,8 +63,6 @@ if ( ! class_exists( 'DWS_ANDA' ) ) {
 		 * @since 2.0.0
 		 */
 		function __construct() {
-			$this->installdir = WP_PLUGIN_URL . '/' . str_replace( basename( __FILE__ ), '', plugin_basename( __FILE__ ) );
-
 			add_action( 'admin_menu', array( $this, 'action_admin_menu' ) );
 			add_action( 'admin_print_scripts', array( $this, 'action_admin_print_scripts' ) );
 			add_action( 'wp_ajax_dws_anda_ajax_callback', array( $this, 'action_wp_ajax_dws_anda_ajax_callback' ) );
@@ -103,8 +92,8 @@ if ( ! class_exists( 'DWS_ANDA' ) ) {
 		 */
 		function action_admin_enqueue_scripts() {
 			wp_enqueue_script( 'jquery-ui-core' ); // Make sure jQuery UI is loaded.
-			wp_enqueue_script( 'dws_ajaxupload', $this->installdir . 'js/ajaxupload.js', array( 'jquery' ), $this->ver );  // Add AjaxUpload.
-			wp_enqueue_script( 'dws_anda_js', $this->installdir . 'js/dws_anda.js', array( 'jquery', 'dws_ajaxupload' ), $this->ver );  // Add JS.
+			wp_enqueue_script( 'dws_ajaxupload', plugins_url( 'js/ajaxupload.js', __FILE__ ), array( 'jquery' ), $this->ver );  // Add AjaxUpload.
+			wp_enqueue_script( 'dws_anda_js', plugins_url( 'js/dws_anda.js', __FILE__ ), array( 'jquery', 'dws_ajaxupload' ), $this->ver );  // Add JS.
 		}
 
 		/**
@@ -113,7 +102,7 @@ if ( ! class_exists( 'DWS_ANDA' ) ) {
 		 * @since 2.0.0
 		 */
 		function action_wp_enqueue_scripts() {
-			wp_enqueue_style( 'dws_anda_style', $this->installdir . 'css/style.css', array(), $this->ver, 'all' );  // Add CSS.
+			wp_enqueue_style( 'dws_anda_style', plugins_url( 'css/style.css', __FILE__ ), array(), $this->ver, 'all' );  // Add CSS.
 		}
 
 		/**
@@ -188,7 +177,7 @@ if ( ! class_exists( 'DWS_ANDA' ) ) {
 			$options = get_option( 'dws_anda' );
 
 			if ( $options ) {
-				$thumb_url = $this->installdir . 'includes/timthumb.php';
+				$thumb_url = plugins_url( 'includes/timthumb.php', __FILE__ );
 				$anda_avatars = array();
 
 				foreach ( $options['avatars'] as $avatar ) {
@@ -328,7 +317,7 @@ if ( ! class_exists( 'DWS_ANDA' ) ) {
 						<?php wp_nonce_field( 'dws_anda_update' ); ?>
 						<input type="hidden" name="update" />
 						<?php
-						$thumb_url = $this->installdir . 'includes/timthumb.php';
+						$thumb_url = plugins_url( 'includes/timthumb.php', __FILE__ );
 						foreach ( $options['avatars'] as $avatar ) {
 							$dws_anda_name = $avatar['name'];
 							$dws_anda_local = $avatar['local'];
