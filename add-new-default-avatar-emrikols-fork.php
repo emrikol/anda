@@ -3,7 +3,7 @@
  * Plugin Name: Add New Default Avatar [Emrikol's Fork]
  * Plugin URI:
  * Description: Add new option to the Default Avatar list.
- * Version: 2.0.0
+ * Version: 3.0.0
  * Author: Decarbonated Web Services
  * Author URI: http://www.decarbonated.com/
  * License: GPL2
@@ -28,7 +28,7 @@ if ( ! class_exists( 'DWS_ANDA' ) ) {
 		 * @access public
 		 * @var string $ver
 		 */
-		var $ver = '2.0';
+		var $ver = '3.0.0';
 
 		/**
 		 * Class constructor.
@@ -73,7 +73,7 @@ if ( ! class_exists( 'DWS_ANDA' ) ) {
 		/**
 		 * Printing inline admin scripts.
 		 *
-		 * @since 2.0.0
+		 * @since 3.0.0
 		 */
 		function action_admin_print_footer_scripts() {
 			?>
