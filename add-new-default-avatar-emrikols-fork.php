@@ -192,7 +192,7 @@ if ( ! class_exists( 'DWS_ANDA' ) ) {
 				update_option( 'dws_anda', $options );
 			}
 
-			if ( isset( $_POST['new'] && isset( $_POST['dws_anda_image_url'] ) ) ) { // WPCS: input var okay.
+			if ( isset( $_POST['new'] ) && isset( $_POST['dws_anda_image_url'] ) ) { // WPCS: input var okay.
 				// Safety check.  Did the admin do this?
 				check_admin_referer( 'dws_anda_new' );
 
@@ -224,8 +224,6 @@ if ( ! class_exists( 'DWS_ANDA' ) ) {
 						<ul>
 							<li>
 								<legend><h3><?php esc_html_e( 'Add a new Avatar', 'dws' ); ?></h3></legend>
-								<?php wp_nonce_field( 'dws_anda_new' ); ?>
-								<input type="hidden" name="new" />
 							</li>
 							<li>
 								<label for="dws_anda_image_url"><?php esc_html_e( 'Image URL', 'dws' ); ?>: </label>
@@ -233,12 +231,11 @@ if ( ! class_exists( 'DWS_ANDA' ) ) {
 								<input type="button" class="button button-primary button-large" id='dws_anda_image_url' value="Select Image" />
 								<input type="hidden" id="dws_anda_avatar_id" name="dws_anda_avatar_id" />
 							</li>
-							<li class='nothidden'>
+							<li>
 								<label for="dws_anda_avatar_name"><?php esc_html_e( 'Avatar Name', 'dws' ); ?>: </label>
 								<input type="text" class="text" id="dws_anda_avatar_name" name="dws_anda_avatar_name" id="dws_anda_avatar_name" value="" />
-							</li>
-							<li class='nothidden'>
-								<?php submit_button( esc_html__( 'Add Avatar', 'dws' ), 'secondary' ); ?>
+								<?php wp_nonce_field( 'dws_anda_new' ); ?>
+								<?php submit_button( esc_html__( 'Add Avatar', 'dws' ), 'secondary', 'new' ); ?>
 							</li>
 						</ul>
 					</fieldset>
@@ -247,19 +244,16 @@ if ( ! class_exists( 'DWS_ANDA' ) ) {
 				<form method="post">
 					<fieldset>
 						<legend><h3><?php esc_html_e( 'Current Custom Avatars', 'dws' ); ?></h3></legend>
-						<?php wp_nonce_field( 'dws_anda_update' ); ?>
-						<input type="hidden" name="update" />
 						<?php
 						foreach ( $options['avatars'] as $avatar ) {
 							?>
 							<h4><input type="checkbox" value="<?php echo esc_attr( $avatar['uid'] ); ?>" name="dws_anda_delete[]" /> <?php echo esc_html( $avatar['name'] ); ?></h4>
-							<p>
-								<?php echo wp_get_attachment_image( $avatar['id'] ); ?>
-							</p>
+							<?php echo wp_get_attachment_image( $avatar['id'] ); ?>
 							<?php
 						}
 						?>
-						<?php submit_button( esc_html__( 'Remove Selected', 'dws' ), 'secondary' ); ?>
+						<?php wp_nonce_field( 'dws_anda_update' ); ?>
+						<?php submit_button( esc_html__( 'Remove Selected', 'dws' ), 'secondary', 'update' ); ?>
 					</fieldset>
 				</form>
 			<?php endif; ?>
