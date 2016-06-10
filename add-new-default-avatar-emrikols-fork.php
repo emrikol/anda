@@ -38,7 +38,6 @@ if ( ! class_exists( 'DWS_ANDA' ) ) {
 		function __construct() {
 			add_action( 'admin_menu', array( $this, 'action_admin_menu' ) );
 			add_action( 'admin_print_footer_scripts', array( $this, 'action_admin_print_footer_scripts' ) );
-			add_action( 'admin_enqueue_scripts', array( $this, 'action_admin_enqueue_scripts' ) );
 
 			add_filter( 'avatar_defaults', array( $this, 'filter_avatar_defaults' ) );
 
@@ -65,9 +64,6 @@ if ( ! class_exists( 'DWS_ANDA' ) ) {
 		function action_admin_enqueue_scripts() {
 			// Enqueue core media uploader.
 			wp_enqueue_media();
-
-			// Plugin CSS.
-			wp_enqueue_style( 'dws_anda_style', plugins_url( 'css/style.css', __FILE__ ), array(), $this->ver, 'all' );  // Add CSS.
 		}
 
 		/**
@@ -109,6 +105,22 @@ if ( ! class_exists( 'DWS_ANDA' ) ) {
 					} );
 				} );
 			</script>
+			<style type="text/css">
+				#dws_anda_add label {
+					display: block;
+					float: left;
+					width: 100px;
+				}
+				#dws_anda_add .text {
+					width: 200px;
+				}
+				#dws_anda_add li {
+					margin: 10px 0px;
+				}
+				#dws_anda_add ol, #dws_anda_add li {
+					list-style-type: none;
+				}
+			</style>
 			<?php
 		}
 
