@@ -1,10 +1,9 @@
 === Add New Default Avatar [Emrikol's Fork] ===
 Contributors: emrikol 
 Tags: avatars, gravatar, default avatar
-Donate link:  http://www.dreamhost.com/donate.cgi?id=13663
-Requires at least: 3.3.1
-Tested up to: 3.3.1
-Stable tag: 2.0.1
+Requires at least: 4.5.2
+Tested up to: 4.5.2
+Stable tag: 3.0.0
 
 This is my version of trepmal's "Add New Default Avatar" plugin.  It has a few more features which I was looking for.
 
@@ -24,6 +23,9 @@ Extract the zip file and just drop the contents in the wp-content/plugins/ direc
 None Yet
 
 == Upgrade Notice ==
+= 3.0.0 =
+THIS UPDATE WILL BREAK YOUR CURRENT CUSTOM AVATARS.  Major security fixes.
+
 = 2.0.1 =
 * Small bug.  I left a WB_DEBUG on :(
 
@@ -43,6 +45,12 @@ None Yet
 * Initial Release
 
 == Changelog ==
+= 3.0.0 =
+**THIS UPDATE WILL BREAK YOUR CURRENT CUSTOM AVATARS**
+It's been five years since the last update, and I finally took another look at this plugin.  Unfortunately it was full of security holes and coding standard issues.  Things have come a long way since the last version.  There aren't any more known security issues, and it's unlikely that I'll update this plugin again unless any new issues arise.
+
+* Major refactoring to remove security vulnerabilities and poor coding standards
+
 = 2.0.1 =
 * Small bug.  I left a WB_DEBUG on :(
 
